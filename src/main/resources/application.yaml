@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: java->>>-Go
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+  main:
+    allow-circular-references: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/shop
+    username: shop
+    password: pass
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true
+  jpa:
+    database: POSTGRESQL
+    show-sql: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+---
