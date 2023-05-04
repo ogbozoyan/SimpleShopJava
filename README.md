@@ -5,7 +5,8 @@
  2. Получение списка всех товаров, получение товаров с заданными фильтрами (цена от-до, фильтр по категориям, фильтры по производителю итд), сортировка товаров (убывание, возрастание), пагинация.
  3. Реализовать корзину для отслеживания истории покупок, для этого потребуется реализовать аутентификацию в системе (пример - jwt token). Реализовать запрос для получения истории покупок конкретного пользователя
  DDL:
-<img width="795" alt="Screenshot 2023-04-29 at 16 11 21" src="https://user-images.githubusercontent.com/85520525/235304396-5fe7724f-b047-4bf5-b20d-eb29fa8c302c.png">
+![image](https://user-images.githubusercontent.com/85520525/236308740-b7fc8e07-c3e9-4776-a635-cc484532ed6a.png)
+
 Sql:
 create table user_table
 (
@@ -74,5 +75,22 @@ create table cart
 );
 
 alter table cart
+    owner to shop;
+
+create table history_order
+(
+    id      bigserial
+        primary key,
+    user_id bigint
+        constraint history_order_user_table_id_fk
+            references user_table
+            on update cascade on delete cascade,
+    cart_id bigint
+        constraint history_order_cart_id_fk
+            references cart
+            on update cascade on delete cascade
+);
+
+alter table history_order
     owner to shop;
 
