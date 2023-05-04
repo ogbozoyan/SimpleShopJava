@@ -5,7 +5,6 @@ import com.practicum.practicumshop.generic.dto.specification.SearchSpecification
 import com.practicum.practicumshop.generic.dto.specification.request.SearchRequest;
 import com.practicum.practicumshop.generic.model.AbstractEntity;
 import com.practicum.practicumshop.generic.repository.AbstractRepository;
-import com.practicum.practicumshop.model.UserEntity;
 import com.practicum.practicumshop.web.controller.advice.*;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

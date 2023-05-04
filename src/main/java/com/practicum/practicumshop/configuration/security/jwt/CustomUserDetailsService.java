@@ -3,7 +3,6 @@ package com.practicum.practicumshop.configuration.security.jwt;
 import com.practicum.practicumshop.model.UserEntity;
 import com.practicum.practicumshop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;

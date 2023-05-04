@@ -2,12 +2,9 @@ package com.practicum.practicumshop.configuration.security.jwt;
 
 import io.jsonwebtoken.*;
 import lombok.Data;
-import org.apache.commons.io.output.AppendableOutputStream;
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import javax.print.DocFlavor;
 import java.time.Instant;
 import java.util.Date;
 

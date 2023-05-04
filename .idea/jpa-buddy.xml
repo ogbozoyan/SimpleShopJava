@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JpaBuddyIdeaProjectConfig" newRepositoryParent="com.practicum.practicumshop.generic.repository.AbstractRepository">
+    <option name="defaultUnitInitialized" value="true" />
+    <option name="renamerInitialized" value="true" />
+    <option name="reverseEngineeringLastDbConnectionId" value="9f1f025a-d345-4bae-aa5e-b7db89028e48" />
+    <option name="reLastEntityCreationPackage" value="src/main/java/com/practicum/practicumshop/model" />
+  </component>
+</project>

@@ -2,14 +2,11 @@ package com.practicum.practicumshop.service;
 
 import com.practicum.practicumshop.configuration.security.jwt.CustomUserDetails;
 import com.practicum.practicumshop.generic.service.AbstractServiceImpl;
-import com.practicum.practicumshop.model.ItemEntity;
-import com.practicum.practicumshop.model.RoleEntity;
-import com.practicum.practicumshop.model.UserEntity;
-import com.practicum.practicumshop.repository.ItemEntityRepository;
-import com.practicum.practicumshop.repository.RoleEntityRepository;
-import com.practicum.practicumshop.repository.UserEntityRepository;
+import com.practicum.practicumshop.model.*;
+import com.practicum.practicumshop.repository.*;
 import com.practicum.practicumshop.web.controller.advice.FindException;
 import com.practicum.practicumshop.web.dto.ItemDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,13 +28,18 @@ public class UserService extends AbstractServiceImpl<UserEntity, UserEntityRepos
     private final PasswordEncoder passwordEncoder;
     private final RoleEntityRepository roleEntityRepository;
     private final ItemEntityRepository itemEntityRepository;
+    private final CartRepository cartRepository;
+    private final HistoryOrderEntityRepository historyOrderEntityRepository;
 
     @Autowired
-    public UserService(UserEntityRepository repository, PasswordEncoder passwordEncoder, RoleEntityRepository roleEntityRepository, ItemEntityRepository itemEntityRepository) {
+    public UserService(UserEntityRepository repository, PasswordEncoder passwordEncoder, RoleEntityRepository roleEntityRepository, ItemEntityRepository itemEntityRepository,
+                       CartRepository cartRepository, HistoryOrderEntityRepository historyOrderEntityRepository) {
         super(repository);
         this.passwordEncoder = passwordEncoder;
         this.roleEntityRepository = roleEntityRepository;
         this.itemEntityRepository = itemEntityRepository;
+        this.cartRepository = cartRepository;
+        this.historyOrderEntityRepository = historyOrderEntityRepository;
     }
 
     @Transactional(readOnly = true)
@@ -70,12 +73,29 @@ public class UserService extends AbstractServiceImpl<UserEntity, UserEntityRepos
     }
 
     @Transactional
-    public UserEntity createOrder(ItemDto itemDto) {
+    public List<CartEntity> createOrder(ItemDto itemDto) {
         try {
             UserEntity user = getCurrent();
-            List<ItemEntity> items = itemEntityRepository.findAllById(itemDto.getItems());
-            user.getItems().addAll(items);
-            return repository.save(user);
+            List<CartEntity> cart = new ArrayList<>();
+            List<HistoryOrderEntity> orders = new ArrayList<>();
+            for(Long item : itemDto.getItems()) {
+                CartEntity cartEntity = new CartEntity();
+                ItemEntity itemEntity = itemEntityRepository.findById(item).orElseThrow();
+                cartEntity.setItem(itemEntity);
+                cartEntity.setUser(user);
+                cart.add(cartEntity);
+            }
+            cart = cartRepository.saveAllAndFlush(cart);
+
+            for(CartEntity cartEntity : cart) {
+                HistoryOrderEntity historyOrderEntity = new HistoryOrderEntity();
+                historyOrderEntity.setUser(cartEntity.getUser());
+                historyOrderEntity.setCart(cartEntity);
+                orders.add(historyOrderEntity);
+            }
+            historyOrderEntityRepository.saveAllAndFlush(orders);
+
+            return cart;
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException();

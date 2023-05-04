@@ -7,8 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -27,14 +25,7 @@ public class UserEntity extends AbstractEntity {
     private String login;
     @Column(name = "password")
     private String password;
-    @OneToMany
-    @JoinTable
-            (
-                    name = "cart",
-                    joinColumns = @JoinColumn(name = "user_id"),
-                    inverseJoinColumns = @JoinColumn(name = "item_id")
-            )
-    private List<ItemEntity> items;
+
     @OneToMany
     @JoinTable
             (
